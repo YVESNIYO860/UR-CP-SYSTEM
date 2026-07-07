@@ -6,6 +6,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 const cpNavItems = [
   { name: 'Dashboard', to: '/cp' },
   { name: 'Book Session', to: '/cp/book' },
+  { name: 'Available Rooms', to: '/cp/available-rooms' },
   { name: 'My Bookings', to: '/cp/bookings' },
   { name: 'Notifications', to: '/cp/notifications' },
   { name: 'Profile', to: '/cp/profile' },

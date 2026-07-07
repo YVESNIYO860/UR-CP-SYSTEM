@@ -233,7 +233,7 @@ export default function LoginPageSimple() {
 
           {/* Footer */}
           <p className="text-center text-xs text-gray-600 mt-8">
-            © 2024 University of Rwanda. All rights reserved.
+            © 2026 University of Rwanda. All rights reserved.
           </p>
         </div>
       </div>

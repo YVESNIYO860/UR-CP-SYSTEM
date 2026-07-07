@@ -343,6 +343,7 @@ export const sampleRoom = {
   facilities: ['Projector', 'Whiteboard', 'Air Conditioning'],
   status: 'Available',
   assignedCP: 'cp-001',
+  isAvailable: true,
 };
 
 export const sampleBookings = [

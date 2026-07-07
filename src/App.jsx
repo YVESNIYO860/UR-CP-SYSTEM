@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import LoginPageSimple from './pages/LoginPageSimple';
 import CpDashboard from './pages/CpDashboard';
 import BookSessionPage from './pages/BookSessionPage';
+import AvailableRoomsPage from './pages/AvailableRoomsPage';
 import MyBookingsPage from './pages/MyBookingsPage';
 import NotificationsPage from './pages/NotificationsPage';
 import ProfilePage from './pages/ProfilePage';
@@ -16,6 +17,7 @@ import AdminSettingsPage from './pages/AdminSettingsPage';
 import SchoolManagementPage from './pages/SchoolManagementPage';
 import DepartmentManagementPage from './pages/DepartmentManagementPage';
 import { sampleUser } from './data/sampleData';
+import FirebaseTest from './pages/FirebaseTest';
 
 function App() {
   const adminUser = { ...sampleUser, role: 'admin', name: 'Dr. Eric Nsanzimana' };
@@ -29,6 +31,7 @@ function App() {
         <Route path="/cp" element={<Layout user={sampleUser} title="CP Dashboard" />}>
           <Route index element={<CpDashboard />} />
           <Route path="book" element={<BookSessionPage />} />
+          <Route path="available-rooms" element={<AvailableRoomsPage />} />
           <Route path="bookings" element={<MyBookingsPage />} />
           <Route path="notifications" element={<NotificationsPage />} />
           <Route path="profile" element={<ProfilePage />} />
@@ -44,6 +47,7 @@ function App() {
           <Route path="settings" element={<AdminSettingsPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/firebase-test" element={<FirebaseTest />} />
       </Routes>
     </BrowserRouter>
   );

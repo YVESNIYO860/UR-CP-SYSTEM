@@ -1,10 +1,20 @@
 import { motion } from 'framer-motion';
-import { BookMarked, CalendarDays, Building2, BellRing, CheckCircle2, Clock3 } from 'lucide-react';
+import { BookMarked, CalendarDays, Building2, BellRing, CheckCircle2, Clock3, ToggleRight, ToggleLeft } from 'lucide-react';
+import { useState } from 'react';
 import { sampleBookings, sampleNotifications, sampleRoom, sampleUser } from '../data/sampleData';
 
 export default function CpDashboard() {
+  const [roomAvailable, setRoomAvailable] = useState(sampleRoom.isAvailable);
+  const [showMessage, setShowMessage] = useState(false);
+  
   const pendingBookings = sampleBookings.filter((booking) => booking.status === 'Pending').length;
   const upcomingBooking = sampleBookings.find((booking) => booking.status === 'Approved') ?? sampleBookings[0];
+
+  const toggleRoomAvailability = () => {
+    setRoomAvailable(!roomAvailable);
+    setShowMessage(true);
+    setTimeout(() => setShowMessage(false), 3000);
+  };
 
   return (
     <div className="relative min-h-screen py-6 px-4">
@@ -37,9 +47,33 @@ export default function CpDashboard() {
                 <p className="mt-1 font-bold text-black text-lg lg:text-xl">{sampleRoom.facilities.join(', ')}</p>
               </div>
               <div className="rounded-lg border-2 border-blue-500 bg-transparent p-4 lg:p-5">
-                <p className="text-sm lg:text-base font-bold text-black">Current Status</p>
-                <p className="mt-1 font-bold text-blue-900 text-lg lg:text-xl">Available</p>
+                <p className="text-sm lg:text-base font-bold text-black">Room Status</p>
+                <p className={`mt-1 font-bold text-lg lg:text-xl ${roomAvailable ? 'text-green-600' : 'text-red-600'}`}>
+                  {roomAvailable ? '✓ Available' : '✗ Unavailable'}
+                </p>
               </div>
+            </div>
+            <div className="mt-6 flex items-center justify-between rounded-lg border-2 border-blue-500 bg-transparent p-4 lg:p-5">
+              <div>
+                <p className="text-sm lg:text-base font-bold text-black">Make Room Available for Others</p>
+                <p className="text-xs lg:text-sm font-semibold text-black mt-1">Mark as unavailable when you're using it</p>
+              </div>
+              <button
+                onClick={toggleRoomAvailability}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-blue-500 bg-transparent hover:bg-blue-50 transition-colors"
+              >
+                {roomAvailable ? (
+                  <>
+                    <ToggleRight size={24} className="text-green-600" />
+                    <span className="font-bold text-black text-sm">On</span>
+                  </>
+                ) : (
+                  <>
+                    <ToggleLeft size={24} className="text-red-600" />
+                    <span className="font-bold text-black text-sm">Off</span>
+                  </>
+                )}
+              </button>
             </div>
           </motion.div>
 
@@ -90,6 +124,23 @@ export default function CpDashboard() {
             <p className="text-sm lg:text-base font-semibold text-black">{sampleUser.class}</p>
           </motion.div>
         </div>
+
+        {showMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className={`fixed top-4 right-4 rounded-lg border-2 p-4 lg:p-5 ${
+              roomAvailable
+                ? 'border-green-500 bg-transparent text-green-700'
+                : 'border-red-500 bg-transparent text-red-700'
+            }`}
+          >
+            <p className="font-bold text-sm lg:text-base">
+              {roomAvailable ? '✓ Room is now AVAILABLE for bookings' : '✗ Room is now UNAVAILABLE for bookings'}
+            </p>
+          </motion.div>
+        )}
       </div>
     </div>
   );

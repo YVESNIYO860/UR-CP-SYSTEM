@@ -2,6 +2,7 @@
 import { ArrowRight, Building2, Mail, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import authService from '../services/authService';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -10,31 +11,46 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modal, setModal] = useState({ visible: false, title: '', message: '' });
+
+  const showModal = (title, message) => setModal({ visible: true, title, message });
+  const closeModal = () => setModal({ visible: false, title: '', message: '' });
+  
 
   const handleLogin = async (event) => {
     event.preventDefault();
     setLoading(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    if (mode === 'admin') {
-      if (email.includes('admin')) {
-        navigate('/admin');
+    try {
+      const result = await authService.login(email, password);
+      
+      if (result.success) {
+        // Route based on role
+        if (result.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/cp');
+        }
       } else {
-        alert('Use an admin email to sign in.');
+        // Show a non-technical in-page modal to avoid exposing backend details
+        if (result.code === 'INVALID_CREDENTIALS') {
+          showModal('Sign-in failed', 'Invalid email or password.');
+        } else if (result.code === 'NETWORK') {
+          showModal('Fetching Error', "We couldn't reach the server. try again later.");
+        } else {
+          showModal('Sign-in failed', 'Unable to sign in. Please try again later.');
+        }
       }
-    } else {
-      if (email.includes('ur.ac.rw') || email.includes('@')) {
-        navigate('/cp');
-      } else {
-        alert('Use a CP email to sign in.');
-      }
+    } catch (err) {
+      showModal('Sign-in failed', 'Unable to sign in. Please try again later.');
+      console.error('Login error:', err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
+    <>
     <div className="relative min-h-screen flex items-center justify-center px-4 py-10 overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 bg-cover bg-center opacity-90"
@@ -77,6 +93,8 @@ export default function LoginPage() {
               Admin Login
             </button>
           </div>
+
+          {/* Error Message suppressed to avoid exposing backend details; using JS alerts instead */}
 
           {/* Login Form */}
           <form onSubmit={handleLogin} className="space-y-4 lg:space-y-6">
@@ -129,13 +147,10 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Demo Info */}
+          {/* Note */}
           <div className="mt-6 rounded-lg bg-transparent border-2 border-blue-500 p-4 text-sm text-black lg:mt-8 lg:p-6">
-            <p className="font-bold text-black mb-2 lg:text-lg">Demo Credentials:</p>
-            <div className="space-y-1 text-xs font-semibold lg:text-sm lg:space-y-2">
-              <p><strong>CP:</strong> alice@ur.ac.rw</p>
-              <p><strong>Admin:</strong> admin@ur.ac.rw</p>
-            </div>
+            <p className="font-bold text-black mb-2 lg:text-lg">Account Assignment</p>
+            <p className="text-xs font-semibold lg:text-sm">Accounts are assigned by your system administrator. If you do not have an account, please contact your administrator.</p>
           </div>
 
           {/* Footer */}
@@ -145,5 +160,18 @@ export default function LoginPage() {
         </div>
       </motion.div>
     </div>
+      {modal.visible && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={closeModal} />
+          <div className="relative z-10 max-w-md w-full rounded-lg bg-white/95 p-6 shadow-lg">
+            <h2 className="text-lg font-bold text-black mb-2">{modal.title}</h2>
+            <p className="text-sm text-black mb-4">{modal.message}</p>
+            <div className="flex justify-end">
+              <button onClick={closeModal} className="rounded px-4 py-2 bg-blue-900 text-white font-bold">OK</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
