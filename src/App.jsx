@@ -1,6 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
-import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import LoginPageSimple from './pages/LoginPageSimple';
 import CpDashboard from './pages/CpDashboard';
@@ -14,6 +13,8 @@ import RoomManagementPage from './pages/RoomManagementPage';
 import BookingManagementPage from './pages/BookingManagementPage';
 import ReportsPage from './pages/ReportsPage';
 import AdminSettingsPage from './pages/AdminSettingsPage';
+import SchoolManagementPage from './pages/SchoolManagementPage';
+import DepartmentManagementPage from './pages/DepartmentManagementPage';
 import { sampleUser } from './data/sampleData';
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login-simple" element={<LoginPageSimple />} />
         <Route path="/cp" element={<Layout user={sampleUser} title="CP Dashboard" />}>
@@ -37,6 +38,8 @@ function App() {
           <Route path="cp-management" element={<CpManagementPage />} />
           <Route path="rooms" element={<RoomManagementPage />} />
           <Route path="bookings" element={<BookingManagementPage />} />
+          <Route path="schools" element={<SchoolManagementPage />} />
+          <Route path="departments" element={<DepartmentManagementPage />} />
           <Route path="reports" element={<ReportsPage />} />
           <Route path="settings" element={<AdminSettingsPage />} />
         </Route>

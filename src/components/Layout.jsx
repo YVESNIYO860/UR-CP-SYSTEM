@@ -15,6 +15,7 @@ const adminNavItems = [
   { name: 'Dashboard', to: '/admin' },
   { name: 'CP Management', to: '/admin/cp-management' },
   { name: 'Buildings & Rooms', to: '/admin/rooms' },
+  { name: 'Schools & Departments', to: '/admin/schools' },
   { name: 'Bookings', to: '/admin/bookings' },
   { name: 'Reports', to: '/admin/reports' },
   { name: 'Settings', to: '/admin/settings' },
