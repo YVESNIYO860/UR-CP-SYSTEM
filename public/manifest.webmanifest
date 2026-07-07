@@ -1,0 +1,16 @@
+{
+  "name": "UR CP Room Booking System",
+  "short_name": "UR CP Booking",
+  "description": "Professional room booking portal for University of Rwanda CPs and administrators",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#003366",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}
